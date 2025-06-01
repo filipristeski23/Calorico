@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Calorico</string>
+
+    <string name="login_title">Login</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_google">Login with Google</string>
+    <string name="btn_facebook">Login with Facebook</string>
+    <string name="btn_anonymous">Continue as Guest</string>
+    <string name="link_to_register">Don’t have an account? Register</string>
+
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etFoodTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Food Title"
+        android:inputType="textPersonName"
+        android:padding="8dp"
+        android:background="@drawable/edittext_border" />
+
+    <EditText
+        android:id="@+id/etFoodCalories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Calories"
+        android:inputType="number"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_border" />
+
+    <EditText
+        android:id="@+id/etFoodProtein"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Protein (g)"
+        android:inputType="number"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_border" />
+
+    <EditText
+        android:id="@+id/etFoodFat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fat (g)"
+        android:inputType="number"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_border" />
+
+</LinearLayout>
