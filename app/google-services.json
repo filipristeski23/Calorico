@@ -12,7 +12,20 @@
           "package_name": "com.example.calorico"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "227579935191-2m1q4jip2iji26ae15mt0a4iq9tf6pnm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.calorico",
+            "certificate_hash": "0f76ba747729bfa562d2a10c858439f38f4d66a5"
+          }
+        },
+        {
+          "client_id": "227579935191-rqgi2mam74ao1v0crr0ejvugsa7rptms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtNdkKo6VgeEwv6PnCA0M-EjO-mlBbGPc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227579935191-rqgi2mam74ao1v0crr0ejvugsa7rptms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

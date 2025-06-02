@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Food title -->
+
         <TextView
             android:id="@+id/tvFoodTitle"
             android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
             android:textStyle="bold"
             android:textSize="16sp" />
 
-        <!-- Nutrition values -->
+
         <TextView
             android:id="@+id/tvFoodValues"
             android:layout_width="wrap_content"

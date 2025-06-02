@@ -5,17 +5,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.calorico.room.AppDatabase;
 import com.example.calorico.room.Day;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,43 +33,75 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fabAddDay;
     private AppDatabase db;
 
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore firestore;
+    private String uid;
+    private boolean isAnonymousUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 1) Find views by ID
         rvDays = findViewById(R.id.rvDays);
         tvEmpty = findViewById(R.id.tvEmpty);
         fabAddDay = findViewById(R.id.fabAddDay);
         Button btnLogout = findViewById(R.id.btnLogout);
 
-        // 2) RecyclerView setup
         rvDays.setLayoutManager(new LinearLayoutManager(this));
         dayAdapter = new DayAdapter(new ArrayList<>());
         rvDays.setAdapter(dayAdapter);
 
-        // 3) When a Day is tapped, open DayDetailActivity
+
         dayAdapter.setOnItemClickListener(day -> {
             Intent intent = new Intent(MainActivity.this, DayDetailActivity.class);
-            intent.putExtra("dayId", day.getId());
+            intent.putExtra("dayDate", day.getDate());
+            intent.putExtra("dayIdRoom", day.getId());
             startActivity(intent);
         });
 
-        // 4) Get Room database instance
         db = AppDatabase.getInstance(getApplicationContext());
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
 
-        // 5) Load existing days
-        loadDaysFromDb();
+            startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+            finish();
+            return;
+        }
 
-        // 6) FAB inserts a new Day (today’s date, zero totals)
-        fabAddDay.setOnClickListener(v -> insertNewDay());
+        isAnonymousUser = currentUser.isAnonymous();
+        if (!isAnonymousUser) {
+            uid = currentUser.getUid();
+            firestore = FirebaseFirestore.getInstance();
+        }
 
-        // 7) Logout simply finishes this activity
-        btnLogout.setOnClickListener(v -> finish());
+        loadDays();
+
+        fabAddDay.setOnClickListener(v -> {
+            if (isAnonymousUser) {
+                insertNewDayRoom();
+            } else {
+                insertNewDayFirestore();
+            }
+        });
+
+        btnLogout.setOnClickListener(v -> {
+            mAuth.signOut();
+            startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+            finish();
+        });
     }
 
-    private void loadDaysFromDb() {
+    private void loadDays() {
+        if (isAnonymousUser) {
+            loadDaysFromRoom();
+        } else {
+            loadDaysFromFirestore();
+        }
+    }
+
+    private void loadDaysFromRoom() {
         new Thread(() -> {
             List<Day> allDays = db.dayDao().getAllDays();
             runOnUiThread(() -> {
@@ -77,13 +117,66 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void insertNewDay() {
+    private void loadDaysFromFirestore() {
+        firestore.collection("users")
+                .document(uid)
+                .collection("days")
+                .orderBy("date")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Day> dayList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            String date = doc.getString("date");
+                            long totalCalories = doc.getLong("totalCalories");
+                            long totalProtein = doc.getLong("totalProtein");
+                            long totalFat = doc.getLong("totalFat");
+                            Day day = new Day(date,
+                                    (int) totalCalories,
+                                    (int) totalProtein,
+                                    (int) totalFat);
+                            dayList.add(day);
+                        }
+                        if (dayList.isEmpty()) {
+                            tvEmpty.setVisibility(View.VISIBLE);
+                            rvDays.setVisibility(View.GONE);
+                        } else {
+                            tvEmpty.setVisibility(View.GONE);
+                            rvDays.setVisibility(View.VISIBLE);
+                            dayAdapter.updateDays(dayList);
+                        }
+                    } else {
+                        tvEmpty.setText("Failed to load days.");
+                        tvEmpty.setVisibility(View.VISIBLE);
+                        rvDays.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void insertNewDayRoom() {
         new Thread(() -> {
             String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     .format(new Date());
             Day day = new Day(today, 0, 0, 0);
             db.dayDao().insertDay(day);
-            loadDaysFromDb();
+            loadDaysFromRoom();
         }).start();
+    }
+
+    private void insertNewDayFirestore() {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                .format(new Date());
+
+        java.util.Map<String, Object> dayMap = new java.util.HashMap<>();
+        dayMap.put("date", today);
+        dayMap.put("totalCalories", 0);
+        dayMap.put("totalProtein", 0);
+        dayMap.put("totalFat", 0);
+
+        firestore.collection("users")
+                .document(uid)
+                .collection("days")
+                .add(dayMap)
+                .addOnCompleteListener(task -> loadDaysFromFirestore());
     }
 }

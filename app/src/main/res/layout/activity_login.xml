@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="24dp">
 
-    <!-- “Login” title -->
+
     <TextView
         android:id="@+id/tvLoginTitle"
         android:layout_width="0dp"
@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="24dp"/>
 
-    <!-- Email input -->
+
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="0dp"
@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Password input -->
+
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="0dp"
@@ -45,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Regular “Login” button -->
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
@@ -56,7 +56,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Google Login button -->
+
     <Button
         android:id="@+id/btnGoogle"
         android:layout_width="0dp"
@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Facebook Login button -->
+
     <Button
         android:id="@+id/btnFacebook"
         android:layout_width="0dp"
@@ -78,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Anonymous button -->
+
     <Button
         android:id="@+id/btnAnonymous"
         android:layout_width="0dp"
@@ -89,7 +89,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Link to Register page -->
+
     <TextView
         android:id="@+id/tvGoToRegister"
         android:layout_width="wrap_content"

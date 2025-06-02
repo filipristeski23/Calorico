@@ -10,4 +10,7 @@
     <string name="btn_anonymous">Continue as Guest</string>
     <string name="link_to_register">Don’t have an account? Register</string>
 
+    <string name="default_web_client_id">227579935191-2m1q4jip2iji26ae15mt0a4iq9tf6pnm.apps.googleusercontent.com</string>
+
+
 </resources>

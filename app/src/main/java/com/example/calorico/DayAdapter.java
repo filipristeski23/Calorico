@@ -14,12 +14,12 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
     private List<Day> dayList;
     private OnItemClickListener listener;
 
-    // Interface for click callbacks
+
     public interface OnItemClickListener {
         void onItemClick(Day day);
     }
 
-    // Setter for the listener
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
@@ -67,7 +67,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
         }
     }
 
-    // Update the list and refresh
+
     public void updateDays(List<Day> newDays) {
         this.dayList = newDays;
         notifyDataSetChanged();

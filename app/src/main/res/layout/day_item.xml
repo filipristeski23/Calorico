@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Date -->
+
         <TextView
             android:id="@+id/tvDayDate"
             android:layout_width="wrap_content"
@@ -23,14 +23,14 @@
             android:textStyle="bold"
             android:textSize="16sp" />
 
-        <!-- Totals label (optional) -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Total:"
             android:layout_marginTop="4dp" />
 
-        <!-- Totals values -->
+
         <TextView
             android:id="@+id/tvDayTotals"
             android:layout_width="wrap_content"

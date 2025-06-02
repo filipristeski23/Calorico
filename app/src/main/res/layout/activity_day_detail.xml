@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Top bar: App name and Logout -->
+
     <TextView
         android:id="@+id/tvDetailAppName"
         android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- RecyclerView for listing foods -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFoods"
         android:layout_width="0dp"
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/fabAddFood"/>
 
-    <!-- Placeholder TextView when no foods exist -->
+
     <TextView
         android:id="@+id/tvFoodEmpty"
         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- FloatingActionButton to add a new Food -->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddFood"
         android:layout_width="wrap_content"
