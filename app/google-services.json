@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "227579935191",
+    "project_id": "calorico",
+    "storage_bucket": "calorico.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227579935191:android:d5107b5032b03e314eb392",
+        "android_client_info": {
+          "package_name": "com.example.calorico"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtNdkKo6VgeEwv6PnCA0M-EjO-mlBbGPc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
