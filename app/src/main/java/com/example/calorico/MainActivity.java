@@ -1,6 +1,7 @@
 package com.example.calorico;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -8,12 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.calorico.room.AppDatabase;
-import com.example.calorico.room.Day;
-import com.example.calorico.room.FoodDao;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+import com.example.calorico.room.AppDatabase;
+import com.example.calorico.room.Day;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,9 +43,16 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private String uid;
     private boolean isAnonymousUser;
+    private TextView tvLangMK, tvLangEN;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> { });
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Context context = LocaleHelper.onAttach(newBase);
+        super.attachBaseContext(context);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
         tvEmpty = findViewById(R.id.tvEmpty);
         fabAddDay = findViewById(R.id.fabAddDay);
         Button btnLogout = findViewById(R.id.btnLogout);
+        tvLangMK = findViewById(R.id.tvLangMK);
+        tvLangEN = findViewById(R.id.tvLangEN);
 
         rvDays.setLayoutManager(new LinearLayoutManager(this));
-        dayAdapter = new DayAdapter(new ArrayList<>());
+        dayAdapter = new DayAdapter(this, new ArrayList<>());
         rvDays.setAdapter(dayAdapter);
 
         dayAdapter.setOnItemClickListener(day -> {
@@ -90,6 +98,19 @@ public class MainActivity extends AppCompatActivity {
             firestore = FirebaseFirestore.getInstance();
         }
 
+        tvLangMK.setText(R.string.language_mk);
+        tvLangEN.setText(R.string.language_en);
+
+        tvLangMK.setOnClickListener(v -> {
+            LocaleHelper.setLocale(MainActivity.this, "mk");
+            recreate();
+        });
+
+        tvLangEN.setOnClickListener(v -> {
+            LocaleHelper.setLocale(MainActivity.this, "en");
+            recreate();
+        });
+
         loadDays();
 
         fabAddDay.setOnClickListener(v -> {
@@ -100,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnLogout.setText(R.string.logout);
         btnLogout.setOnClickListener(v -> {
             mAuth.signOut();
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
@@ -122,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
             List<Day> allDays = db.dayDao().getAllDays();
             runOnUiThread(() -> {
                 if (allDays.isEmpty()) {
+                    tvEmpty.setText(R.string.no_days);
                     tvEmpty.setVisibility(View.VISIBLE);
                     rvDays.setVisibility(View.GONE);
                 } else {
@@ -151,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                             dayList.add(day);
                         }
                         if (dayList.isEmpty()) {
+                            tvEmpty.setText(R.string.no_days);
                             tvEmpty.setVisibility(View.VISIBLE);
                             rvDays.setVisibility(View.GONE);
                         } else {
@@ -159,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                             dayAdapter.updateDays(dayList);
                         }
                     } else {
-                        tvEmpty.setText("Failed to load days.");
+                        tvEmpty.setText(R.string.no_days);
                         tvEmpty.setVisibility(View.VISIBLE);
                         rvDays.setVisibility(View.GONE);
                     }

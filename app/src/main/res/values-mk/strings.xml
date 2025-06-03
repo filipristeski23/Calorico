@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Калорико</string>
+    <string name="login_title">Најава</string>
+    <string name="hint_email">Е-пошта</string>
+    <string name="hint_password">Лозинка</string>
+    <string name="btn_login">Најави се</string>
+    <string name="btn_google">Најава со Google</string>
+    <string name="btn_facebook">Најава со Facebook</string>
+    <string name="btn_anonymous">Продолжи како гостин</string>
+    <string name="link_to_register">Немате профил? Регистрирај се</string>
+    <string name="logout">Одјави се</string>
+    <string name="no_days">Нема денови. Кликнете + за да додадете.</string>
+    <string name="no_foods">Нема храна. Кликнете + за да додадете.</string>
+    <string name="total_macros">Вкупно макронутриенти:</string>
+    <string name="add_food">Додај храна</string>
+    <string name="language_mk">МК</string>
+    <string name="language_en">АНГ</string>
+    <string name="calories">Калории</string>
+    <string name="protein">Протеини</string>
+    <string name="fat">Масти</string>
+    <string name="add">Додај</string>
+    <string name="cancel">Откажи</string>
+    <string name="food_title">Име на храната</string>
+    <string name="calories_hint">Калории</string>
+    <string name="protein_hint">Протеини (г)</string>
+    <string name="fat_hint">Масти (г)</string>
+</resources>

@@ -1,5 +1,6 @@
 package com.example.calorico;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,10 @@ import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
     private List<Food> foodList;
+    private Context context;
 
-    public FoodAdapter(List<Food> foodList) {
+    public FoodAdapter(Context context, List<Food> foodList) {
+        this.context = context;
         this.foodList = foodList;
     }
 
@@ -27,9 +30,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         Food food = foodList.get(position);
         holder.tvTitle.setText(food.getTitle());
-        String valuesText = "Calories: " + food.getCalories() +
-                "  Protein: " + food.getProtein() + "g" +
-                "  Fat: " + food.getFat() + "g";
+
+        String valuesText = context.getString(R.string.calories) + ": " + food.getCalories() + "  " +
+                context.getString(R.string.protein) + ": " + food.getProtein() + "g" +
+                "  " + context.getString(R.string.fat) + ": " + food.getFat() + "g";
         holder.tvValues.setText(valuesText);
     }
 

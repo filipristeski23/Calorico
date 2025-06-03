@@ -1,5 +1,6 @@
 package com.example.calorico;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import java.util.List;
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
     private List<Day> dayList;
     private OnItemClickListener listener;
+    private Context context;
 
     public interface OnItemClickListener {
         void onItemClick(Day day);
@@ -21,7 +23,8 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
         this.listener = listener;
     }
 
-    public DayAdapter(List<Day> dayList) {
+    public DayAdapter(Context context, List<Day> dayList) {
+        this.context = context;
         this.dayList = dayList;
     }
 
@@ -36,10 +39,12 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
         Day day = dayList.get(position);
         holder.tvDate.setText(day.getDate());
-        String totalsText = "Calories: " + day.getTotalCalories() +
-                "  Protein: " + day.getTotalProtein() + "g" +
-                "  Fat: " + day.getTotalFat() + "g";
+
+        String totalsText = context.getString(R.string.calories) + ": " + day.getTotalCalories() + "  " +
+                context.getString(R.string.protein) + ": " + day.getTotalProtein() + "g" +
+                "  " + context.getString(R.string.fat) + ": " + day.getTotalFat() + "g";
         holder.tvTotals.setText(totalsText);
+
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClick(day);

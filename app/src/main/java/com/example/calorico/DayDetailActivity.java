@@ -1,16 +1,15 @@
 package com.example.calorico;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.calorico.room.AppDatabase;
 import com.example.calorico.room.Day;
 import com.example.calorico.room.Food;
@@ -24,10 +23,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class DayDetailActivity extends AppCompatActivity {
 
@@ -36,15 +33,20 @@ public class DayDetailActivity extends AppCompatActivity {
     private TextView tvFoodEmpty;
     private FloatingActionButton fabAddFood;
     private AppDatabase db;
-
     private boolean isAnonymousUser;
     private int dayIdRoom;
     private Day currentDayRoom;
-
     private String dayDate;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
     private String uid;
+    private TextView tvLangMK, tvLangEN;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Context context = LocaleHelper.onAttach(newBase);
+        super.attachBaseContext(context);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +57,11 @@ public class DayDetailActivity extends AppCompatActivity {
         tvFoodEmpty = findViewById(R.id.tvFoodEmpty);
         fabAddFood = findViewById(R.id.fabAddFood);
         Button btnDetailLogout = findViewById(R.id.btnDetailLogout);
+        tvLangMK = findViewById(R.id.tvLangMK);
+        tvLangEN = findViewById(R.id.tvLangEN);
 
         rvFoods.setLayoutManager(new LinearLayoutManager(this));
-        foodAdapter = new FoodAdapter(new ArrayList<>());
+        foodAdapter = new FoodAdapter(this, new ArrayList<>());
         rvFoods.setAdapter(foodAdapter);
 
         db = AppDatabase.getInstance(getApplicationContext());
@@ -77,14 +81,28 @@ public class DayDetailActivity extends AppCompatActivity {
             dayDate = getIntent().getStringExtra("dayDate");
         }
 
-        loadDayAndFoods();
+        tvLangMK.setText(R.string.language_mk);
+        tvLangEN.setText(R.string.language_en);
 
-        fabAddFood.setOnClickListener(v -> showAddFoodDialog());
+        tvLangMK.setOnClickListener(v -> {
+            LocaleHelper.setLocale(DayDetailActivity.this, "mk");
+            recreate();
+        });
 
+        tvLangEN.setOnClickListener(v -> {
+            LocaleHelper.setLocale(DayDetailActivity.this, "en");
+            recreate();
+        });
+
+        btnDetailLogout.setText(R.string.logout);
         btnDetailLogout.setOnClickListener(v -> {
             mAuth.signOut();
             finish();
         });
+
+        loadDayAndFoods();
+
+        fabAddFood.setOnClickListener(v -> showAddFoodDialog());
     }
 
     private void loadDayAndFoods() {
@@ -95,8 +113,6 @@ public class DayDetailActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void loadRoomData() {
         new Thread(() -> {
             DayDao dayDao = db.dayDao();
@@ -106,6 +122,7 @@ public class DayDetailActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 if (foods.isEmpty()) {
+                    tvFoodEmpty.setText(R.string.no_foods);
                     tvFoodEmpty.setVisibility(View.VISIBLE);
                     rvFoods.setVisibility(View.GONE);
                 } else {
@@ -123,7 +140,6 @@ public class DayDetailActivity extends AppCompatActivity {
             Food food = new Food(dayIdRoom, title, calories, protein, fat);
             foodDao.insertFood(food);
 
-
             currentDayRoom.setTotalCalories(currentDayRoom.getTotalCalories() + calories);
             currentDayRoom.setTotalProtein(currentDayRoom.getTotalProtein() + protein);
             currentDayRoom.setTotalFat(currentDayRoom.getTotalFat() + fat);
@@ -132,8 +148,6 @@ public class DayDetailActivity extends AppCompatActivity {
             loadRoomData();
         }).start();
     }
-
-
 
     private void loadFirestoreData() {
         CollectionReference daysRef = firestore
@@ -165,6 +179,7 @@ public class DayDetailActivity extends AppCompatActivity {
                                 list.add(f);
                             }
                             if (list.isEmpty()) {
+                                tvFoodEmpty.setText(R.string.no_foods);
                                 tvFoodEmpty.setVisibility(View.VISIBLE);
                                 rvFoods.setVisibility(View.GONE);
                             } else {
@@ -175,7 +190,7 @@ public class DayDetailActivity extends AppCompatActivity {
                         });
 
                     } else {
-                        tvFoodEmpty.setText("No foods yet. Tap + to add.");
+                        tvFoodEmpty.setText(R.string.no_foods);
                         tvFoodEmpty.setVisibility(View.VISIBLE);
                         rvFoods.setVisibility(View.GONE);
                     }
@@ -225,7 +240,7 @@ public class DayDetailActivity extends AppCompatActivity {
 
     private void showAddFoodDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Food");
+        builder.setTitle(R.string.add_food);
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_food, null);
         builder.setView(dialogView);
@@ -235,7 +250,12 @@ public class DayDetailActivity extends AppCompatActivity {
         EditText etProtein = dialogView.findViewById(R.id.etFoodProtein);
         EditText etFat = dialogView.findViewById(R.id.etFoodFat);
 
-        builder.setPositiveButton("Add", (dialog, which) -> {
+        etTitle.setHint(R.string.food_title);
+        etCalories.setHint(R.string.calories_hint);
+        etProtein.setHint(R.string.protein_hint);
+        etFat.setHint(R.string.fat_hint);
+
+        builder.setPositiveButton(R.string.add, (dialog, which) -> {
             String title = etTitle.getText().toString().trim();
             int calories = Integer.parseInt(etCalories.getText().toString().trim());
             int protein = Integer.parseInt(etProtein.getText().toString().trim());
@@ -247,7 +267,7 @@ public class DayDetailActivity extends AppCompatActivity {
                 insertFoodFirestore(title, calories, protein, fat);
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(R.string.cancel, null);
 
         builder.show();
     }
