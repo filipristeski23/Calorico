@@ -4,7 +4,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
-
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(
@@ -29,7 +28,6 @@ public class Food {
     private int protein;
     private int fat;
 
-
     public Food(int dayId, @NonNull String title, int calories, int protein, int fat) {
         this.dayId = dayId;
         this.title = title;
@@ -37,7 +35,6 @@ public class Food {
         this.protein = protein;
         this.fat = fat;
     }
-
 
     public int getId() {
         return id;

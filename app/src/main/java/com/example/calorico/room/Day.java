@@ -4,7 +4,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
-
 @Entity(tableName = "days")
 public class Day {
     @PrimaryKey(autoGenerate = true)
@@ -17,14 +16,12 @@ public class Day {
     private int totalProtein;
     private int totalFat;
 
-
     public Day(@NonNull String date, int totalCalories, int totalProtein, int totalFat) {
         this.date = date;
         this.totalCalories = totalCalories;
         this.totalProtein = totalProtein;
         this.totalFat = totalFat;
     }
-
 
     public int getId() {
         return id;

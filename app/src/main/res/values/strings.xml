@@ -10,7 +10,9 @@
     <string name="btn_anonymous">Continue as Guest</string>
     <string name="link_to_register">Don’t have an account? Register</string>
 
-    <string name="default_web_client_id">227579935191-2m1q4jip2iji26ae15mt0a4iq9tf6pnm.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">227579935191-rqgi2mam74ao1v0crr0ejvugsa7rptms.apps.googleusercontent.com</string>
 
 
+    <string name="facebook_app_id">1353884952358431</string>
+    <string name="facebook_client_token">b49864c907cd14ac4c6395ec4173b1d7</string>
 </resources>

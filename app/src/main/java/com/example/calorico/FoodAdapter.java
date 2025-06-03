@@ -10,7 +10,6 @@ import com.example.calorico.room.Food;
 import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
-
     private List<Food> foodList;
 
     public FoodAdapter(List<Food> foodList) {
@@ -20,8 +19,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     @NonNull
     @Override
     public FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.food_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.food_item, parent, false);
         return new FoodViewHolder(view);
     }
 
@@ -42,7 +40,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     public static class FoodViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvValues;
-
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvFoodTitle);

@@ -10,15 +10,12 @@ import com.example.calorico.room.Day;
 import java.util.List;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
-
     private List<Day> dayList;
     private OnItemClickListener listener;
-
 
     public interface OnItemClickListener {
         void onItemClick(Day day);
     }
-
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
@@ -31,8 +28,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.day_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.day_item, parent, false);
         return new DayViewHolder(view);
     }
 
@@ -44,7 +40,6 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
                 "  Protein: " + day.getTotalProtein() + "g" +
                 "  Fat: " + day.getTotalFat() + "g";
         holder.tvTotals.setText(totalsText);
-
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClick(day);
@@ -59,14 +54,12 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
 
     public static class DayViewHolder extends RecyclerView.ViewHolder {
         TextView tvDate, tvTotals;
-
         public DayViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDayDate);
             tvTotals = itemView.findViewById(R.id.tvDayTotals);
         }
     }
-
 
     public void updateDays(List<Day> newDays) {
         this.dayList = newDays;
