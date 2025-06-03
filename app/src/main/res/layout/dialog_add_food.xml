@@ -4,45 +4,58 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/bg_green_pill">
 
     <EditText
         android:id="@+id/etFoodTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Food Title"
+        android:textColor="#FF000000"
+        android:textColorHint="#80000000"
         android:inputType="textPersonName"
-        android:padding="8dp"
-        android:background="@drawable/edittext_border" />
+        android:padding="16dp"
+        android:background="@drawable/edittext_white_rounded"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etFoodCalories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Calories"
+        android:textColor="#FF000000"
+        android:textColorHint="#80000000"
         android:inputType="number"
-        android:padding="8dp"
+        android:padding="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_border" />
+        android:background="@drawable/edittext_white_rounded"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etFoodProtein"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Protein (g)"
+        android:textColor="#FF000000"
+        android:textColorHint="#80000000"
         android:inputType="number"
-        android:padding="8dp"
+        android:padding="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_border" />
+        android:background="@drawable/edittext_white_rounded"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etFoodFat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Fat (g)"
+        android:textColor="#FF000000"
+        android:textColorHint="#80000000"
         android:inputType="number"
-        android:padding="8dp"
+        android:padding="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_border" />
+        android:background="@drawable/edittext_white_rounded"
+        android:textSize="16sp" />
 
 </LinearLayout>

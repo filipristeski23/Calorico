@@ -102,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnLogout.setOnClickListener(v -> {
             mAuth.signOut();
-            startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
         });
     }

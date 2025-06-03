@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#7DFF86">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,28 +15,28 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-
         <TextView
             android:id="@+id/tvDayDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2025-06-01"
+            android:textColor="#FF000000"
             android:textStyle="bold"
             android:textSize="16sp" />
-
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total:"
+            android:text="Total Macros:"
+            android:textColor="#FF000000"
             android:layout_marginTop="4dp" />
-
 
         <TextView
             android:id="@+id/tvDayTotals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Calories: 0  Protein: 0g  Fat: 0g"
+            android:textColor="#FF000000"
             android:layout_marginTop="2dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
