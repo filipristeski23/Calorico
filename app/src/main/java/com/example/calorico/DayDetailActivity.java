@@ -1,6 +1,7 @@
 package com.example.calorico;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.calorico.room.AppDatabase;
 import com.example.calorico.room.Day;
@@ -48,6 +49,10 @@ public class DayDetailActivity extends AppCompatActivity {
         super.attachBaseContext(context);
     }
 
+    private boolean isTablet() {
+        return getResources().getConfiguration().smallestScreenWidthDp >= 600;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +65,14 @@ public class DayDetailActivity extends AppCompatActivity {
         tvLangMK = findViewById(R.id.tvLangMK);
         tvLangEN = findViewById(R.id.tvLangEN);
 
-        rvFoods.setLayoutManager(new LinearLayoutManager(this));
+        int spanCount;
+        if (isTablet()) {
+            spanCount = 2;
+        } else {
+            int orientation = getResources().getConfiguration().orientation;
+            spanCount = (orientation == Configuration.ORIENTATION_LANDSCAPE) ? 2 : 1;
+        }
+        rvFoods.setLayoutManager(new GridLayoutManager(this, spanCount));
         foodAdapter = new FoodAdapter(this, new ArrayList<>());
         rvFoods.setAdapter(foodAdapter);
 
@@ -105,6 +117,19 @@ public class DayDetailActivity extends AppCompatActivity {
         fabAddFood.setOnClickListener(v -> showAddFoodDialog());
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int spanCount;
+        if (isTablet()) {
+            spanCount = 2;
+        } else {
+            spanCount = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) ? 2 : 1;
+        }
+        rvFoods.setLayoutManager(new GridLayoutManager(this, spanCount));
+    }
+
     private void loadDayAndFoods() {
         if (isAnonymousUser) {
             loadRoomData();
@@ -145,6 +170,8 @@ public class DayDetailActivity extends AppCompatActivity {
             currentDayRoom.setTotalFat(currentDayRoom.getTotalFat() + fat);
             db.dayDao().updateDay(currentDayRoom);
 
+            // Notify MainActivity to refresh
+            setResult(RESULT_OK);
             loadRoomData();
         }).start();
     }
@@ -232,7 +259,11 @@ public class DayDetailActivity extends AppCompatActivity {
                                     updates.put("totalFat", prevFat + fat);
 
                                     dayRef.update(updates)
-                                            .addOnSuccessListener(updateTask -> loadFirestoreData());
+                                            .addOnSuccessListener(updateTask -> {
+                                                // Notify MainActivity to refresh
+                                                setResult(RESULT_OK);
+                                                loadFirestoreData();
+                                            });
                                 });
                     }
                 });

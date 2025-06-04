@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,9 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -34,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_NOTIFICATION_PERMISSION = 100;
+    private static final int DAY_DETAIL_REQUEST = 100;
     private RecyclerView rvDays;
     private DayAdapter dayAdapter;
     private TextView tvEmpty;
@@ -54,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         super.attachBaseContext(context);
     }
 
+    private boolean isTablet() {
+        return getResources().getConfiguration().smallestScreenWidthDp >= 600;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +79,14 @@ public class MainActivity extends AppCompatActivity {
         tvLangMK = findViewById(R.id.tvLangMK);
         tvLangEN = findViewById(R.id.tvLangEN);
 
-        rvDays.setLayoutManager(new LinearLayoutManager(this));
+        int spanCount;
+        if (isTablet()) {
+            spanCount = 2;
+        } else {
+            int orientation = getResources().getConfiguration().orientation;
+            spanCount = (orientation == Configuration.ORIENTATION_LANDSCAPE) ? 2 : 1;
+        }
+        rvDays.setLayoutManager(new GridLayoutManager(this, spanCount));
         dayAdapter = new DayAdapter(this, new ArrayList<>());
         rvDays.setAdapter(dayAdapter);
 
@@ -80,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, DayDetailActivity.class);
             intent.putExtra("dayDate", day.getDate());
             intent.putExtra("dayIdRoom", day.getId());
-            startActivity(intent);
+            startActivityForResult(intent, DAY_DETAIL_REQUEST);
         });
 
         db = AppDatabase.getInstance(getApplicationContext());
@@ -129,6 +143,33 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadDays();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DAY_DETAIL_REQUEST && resultCode == RESULT_OK) {
+            loadDays();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int spanCount;
+        if (isTablet()) {
+            spanCount = 2;
+        } else {
+            spanCount = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) ? 2 : 1;
+        }
+        rvDays.setLayoutManager(new GridLayoutManager(this, spanCount));
     }
 
     private void loadDays() {
@@ -198,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
             Data inputData = CheckFoodLoggingWorker.makeInputDataForRoom((int) newId, today);
             OneTimeWorkRequest checkWork = new OneTimeWorkRequest.Builder(CheckFoodLoggingWorker.class)
                     .setInputData(inputData)
-                    .setInitialDelay(12, TimeUnit.HOURS)
+                    .setInitialDelay(1, TimeUnit.MINUTES)
                     .build();
             WorkManager.getInstance(getApplicationContext()).enqueue(checkWork);
             runOnUiThread(this::loadDaysFromRoom);
@@ -222,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                     Data inputData = CheckFoodLoggingWorker.makeInputDataForFirestore(uid, newDayDocId, today);
                     OneTimeWorkRequest checkWork = new OneTimeWorkRequest.Builder(CheckFoodLoggingWorker.class)
                             .setInputData(inputData)
-                            .setInitialDelay(12, TimeUnit.HOURS)
+                            .setInitialDelay(1, TimeUnit.MINUTES)
                             .build();
                     WorkManager.getInstance(getApplicationContext()).enqueue(checkWork);
                     loadDaysFromFirestore();
